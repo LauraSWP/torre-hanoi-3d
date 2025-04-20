@@ -3,7 +3,7 @@
  */
 
 // Colores para los discos
-const DISK_COLORS = [
+export const DISK_COLORS = [
     0xff4136, // Rojo
     0xff851b, // Naranja
     0xffdc00, // Amarillo
@@ -19,7 +19,7 @@ const DISK_COLORS = [
  * @param {number} seconds - Tiempo en segundos
  * @return {string} - Tiempo formateado
  */
-function formatTime(seconds) {
+export function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
@@ -32,7 +32,7 @@ function formatTime(seconds) {
  * @param {number} baseHeight - Altura de la base de la torre
  * @return {number} - Posición Y del disco
  */
-function calculateDiskY(index, diskHeight, baseHeight) {
+export function calculateDiskY(index, diskHeight, baseHeight) {
     return baseHeight / 2 + diskHeight / 2 + index * diskHeight;
 }
 
@@ -42,7 +42,7 @@ function calculateDiskY(index, diskHeight, baseHeight) {
  * @param {number} max - Valor máximo
  * @return {number} - Número aleatorio
  */
-function randomBetween(min, max) {
+export function randomBetween(min, max) {
     return Math.random() * (max - min) + min;
 }
 
@@ -51,7 +51,7 @@ function randomBetween(min, max) {
  * @param {number} numDisks - Número de discos
  * @return {number} - Número mínimo de movimientos
  */
-function calculateMinMoves(numDisks) {
+export function calculateMinMoves(numDisks) {
     return Math.pow(2, numDisks) - 1;
 }
 
@@ -59,6 +59,6 @@ function calculateMinMoves(numDisks) {
  * Detecta si el dispositivo es móvil o tablet
  * @return {boolean} - true si es móvil o tablet
  */
-function isMobileDevice() {
+export function isMobileDevice() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 } 

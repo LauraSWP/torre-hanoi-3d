@@ -1,7 +1,13 @@
+import * as THREE from 'three';
+import { Tower } from './Tower.js';
+import { Disk } from './Disk.js';
+import { loadJapaneseTowerModel, jtowermodel } from './models.js'; // Importar función y variable
+import { formatTime, calculateDiskY, calculateMinMoves, isMobileDevice, DISK_COLORS } from './utils.js'; // Importar utilidades
+
 /**
  * Clase principal que maneja el juego Torre de Hanoi
  */
-class Game {
+export class Game { // Exportar la clase
     /**
      * Constructor de la clase Game
      * @param {HTMLElement} container - Contenedor donde se renderizará el juego
@@ -64,16 +70,39 @@ class Game {
      * Inicializa el juego
      */
     init() {
-        this.setupThreeJs();
-        this.setupLights();
-        this.setupCamera();
-        this.setupRaycaster();
-        this.setupDragPlane();
-        this.createTowers();
-        this.setupControls();
-        this.loadSounds();
-        this.resetGame();
-        this.animate();
+        // Cargar modelos 3D primero si están disponibles
+        this.loadModels().then(() => {
+            this.setupThreeJs();
+            this.setupLights();
+            this.setupCamera();
+            this.setupRaycaster();
+            this.setupDragPlane();
+            this.createTowers();
+            this.setupControls();
+            this.loadSounds();
+            this.resetGame();
+            this.animate();
+        });
+    }
+    
+    /**
+     * Carga los modelos 3D necesarios para el juego
+     * @return {Promise} - Promise que se resuelve cuando todos los modelos están cargados
+     */
+    loadModels() {
+        // Si la función de carga de modelos existe, la llamamos
+        if (typeof loadJapaneseTowerModel === 'function') {
+            console.log('Cargando modelos 3D...');
+            return loadJapaneseTowerModel().catch(error => {
+                console.error('Error al cargar modelos:', error);
+                // Continuar aunque falle la carga
+                return Promise.resolve();
+            });
+        } else {
+            console.log('Función de carga de modelos no disponible');
+            // Si no existe la función, continuamos con inicialización
+            return Promise.resolve();
+        }
     }
     
     /**
@@ -1201,40 +1230,64 @@ class Game {
      * Aplica los temas a torres y discos
      */
     applyThemes() {
+        console.log('Aplicando tema:', this.currentTheme);
+        
         // Aplicar tema a torres
-        this.towers.forEach(tower => {
+        this.towers.forEach((tower, index) => {
+            console.log(`Torre ${index} - Tema actual: ${tower.theme}, Nuevo tema: ${this.currentTheme.tower}`);
+            
             if (tower.theme !== this.currentTheme.tower) {
+                console.log(`Cambiando tema de torre ${index} de '${tower.theme}' a '${this.currentTheme.tower}'`);
+                
                 const changes = tower.changeTheme(this.currentTheme.tower);
                 
                 // Actualizar referencias en la escena
                 if (changes.oldTowerMesh.parent) {
                     changes.oldTowerMesh.parent.remove(changes.oldTowerMesh);
+                    console.log(`Mesh anterior de torre ${index} eliminado de la escena`);
                 }
                 if (changes.oldBaseMesh.parent) {
                     changes.oldBaseMesh.parent.remove(changes.oldBaseMesh);
+                    console.log(`Base anterior de torre ${index} eliminada de la escena`);
+                }
+                
+                // Eliminar decoraciones antiguas de la escena
+                if (changes.oldDecorations) {
+                    changes.oldDecorations.forEach((decoration, i) => {
+                        if (decoration.parent) {
+                            decoration.parent.remove(decoration);
+                            console.log(`Decoración antigua ${i} para torre ${index} eliminada de la escena`);
+                        }
+                    });
                 }
                 
                 // Añadir nuevos elementos a la escena
                 this.scene.add(changes.newTowerMesh);
                 this.scene.add(changes.newBaseMesh);
+                console.log(`Nuevos meshes para torre ${index} añadidos a la escena`);
                 
                 // Añadir nuevas decoraciones a la escena
-                changes.decorations.forEach(decoration => {
+                changes.decorations.forEach((decoration, i) => {
                     this.scene.add(decoration);
+                    console.log(`Decoración ${i} para torre ${index} añadida a la escena`);
                 });
             }
         });
         
         // Aplicar tema a discos
-        this.disks.forEach(disk => {
+        this.disks.forEach((disk, index) => {
             if (disk.theme !== this.currentTheme.disk || disk.shape !== this.currentTheme.diskShape) {
+                console.log(`Cambiando tema de disco ${index} de '${disk.theme}' a '${this.currentTheme.disk}'`);
+                
                 const changes = disk.changeTheme(this.currentTheme.disk, this.currentTheme.diskShape);
                 
                 // Reemplazar mesh en la escena
                 if (changes.oldMesh.parent) {
                     changes.oldMesh.parent.remove(changes.oldMesh);
+                    console.log(`Mesh anterior de disco ${index} eliminado de la escena`);
                 }
                 this.scene.add(changes.newMesh);
+                console.log(`Nuevo mesh para disco ${index} añadido a la escena`);
             }
         });
         

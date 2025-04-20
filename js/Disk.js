@@ -1,7 +1,9 @@
+import * as THREE from 'three';
+
 /**
  * Clase que representa un disco en el juego Torre de Hanoi
  */
-class Disk {
+export class Disk {
     /**
      * Constructor de la clase Disk
      * @param {number} size - Tamaño del disco (1 es el más pequeño)
@@ -91,8 +93,7 @@ class Disk {
                 
             case 'candy':
                 material = new THREE.MeshToonMaterial({
-                    color: this.getColorByIndex(),
-                    shininess: 0
+                    color: this.getColorByIndex()
                 });
                 break;
                 
@@ -123,7 +124,7 @@ class Disk {
             default:
                 material = new THREE.MeshPhongMaterial({
                     color: this.getColorByIndex(),
-                    shininess: 30,
+                    // shininess: 30, // MeshPhongMaterial does support shininess, but let's comment if causing issues
                     specular: 0x111111
                 });
                 break;
@@ -206,8 +207,13 @@ class Disk {
             gem: [0xFF0088, 0x00FFBB, 0xCCFF00, 0x00BBFF, 0xEE2200, 0x3300FF, 0xFF8800, 0xBB00FF]
         };
         
+        // Definir DISK_COLORS si no está globalmente disponible
+        const DISK_COLORS = colors.default || [
+            0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff, 0x00ffff, 0xffffff, 0x808080
+        ];
+
         // Usar colores del tema o los predeterminados
-        const themeColors = colors[this.theme] || colors.default;
+        const themeColors = colors[this.theme] || DISK_COLORS;
         return themeColors[this.index % themeColors.length];
     }
 

@@ -1,14 +1,18 @@
+import * as THREE from 'three';
+import { Disk } from './Disk.js'; // Asegúrate de que Disk.js también exporte la clase Disk
+
 /**
  * Clase que representa una torre en el juego Torre de Hanoi
  */
-class Tower {
+export class Tower {
     /**
      * Constructor de la clase Tower
      * @param {number} id - Identificador de la torre (0, 1, 2)
      * @param {THREE.Vector3} position - Posición de la torre
+     * @param {THREE.Scene} scene - La escena principal del juego
      * @param {string} theme - Tema de la torre (default, japanese, futuristic, ancient)
      */
-    constructor(id, position, theme = 'default') {
+    constructor(id, position, scene, theme = 'default') {
         this.id = id;
         this.position = position;
         this.disks = [];
@@ -32,14 +36,12 @@ class Tower {
         
         switch (this.theme) {
             case 'japanese':
-                // Poste estilo pagoda japonesa - Low Poly
-                radius = 0.4;
-                geometry = new THREE.CylinderGeometry(radius * 0.7, radius, height, 6); // Reducir segmentos para low poly
-                material = new THREE.MeshPhongMaterial({
-                    color: 0x8B0000, // Rojo oscuro
-                    shininess: 30,
-                    specular: 0x222222,
-                    map: this.createWoodTexture('japanese')
+                // Para el tema japonés, cargaremos un modelo predefinido en otra parte
+                // Aquí solo creamos un objeto mesh temporal que será reemplazado
+                geometry = new THREE.CylinderGeometry(0.1, 0.1, height, 6);
+                material = new THREE.MeshBasicMaterial({
+                    color: 0x000000,
+                    visible: false // Hacemos el poste central invisible
                 });
                 break;
                 
@@ -210,6 +212,51 @@ class Tower {
      * Crea decoraciones para el tema japonés
      */
     createJapaneseDecorations() {
+        // Cargar el modelo japonés predefinido
+        if (typeof jtowermodel !== 'undefined' && jtowermodel !== null) {
+            console.log('Usando modelo japonés predefinido para la torre', this.id);
+            
+            try {
+                // Clonar el modelo para evitar problemas con múltiples torres
+                const towerModel = jtowermodel.clone();
+                
+                // Posicionar el modelo en la ubicación de la torre
+                towerModel.position.copy(this.position);
+                
+                // Ajustar escala si es necesario
+                towerModel.scale.set(1, 1, 1);
+                
+                // Ajustar rotación si es necesario
+                // towerModel.rotation.y = Math.PI; // Ejemplo: rotar 180 grados
+                
+                // Aplicar sombras a todos los componentes del modelo
+                towerModel.traverse(child => {
+                    if (child.isMesh) {
+                        child.castShadow = true;
+                        child.receiveShadow = true;
+                    }
+                });
+                
+                console.log('Modelo japonés añadido exitosamente a la torre', this.id);
+                
+                // Añadir el modelo a las decoraciones
+                this.decorations.push(towerModel);
+            } catch (error) {
+                console.error('Error al clonar el modelo japonés:', error);
+                this.createFallbackJapaneseDecorations();
+            }
+        } else {
+            console.warn(`El modelo jtowermodel no está disponible para la torre ${this.id}. Estado: ${jtowermodel === null ? 'null' : 'undefined'}`);
+            this.createFallbackJapaneseDecorations();
+        }
+    }
+    
+    /**
+     * Crea decoraciones japonesas de respaldo si el modelo 3D no está disponible
+     */
+    createFallbackJapaneseDecorations() {
+        console.log('Creando decoraciones japonesas de respaldo para la torre', this.id);
+        
         // Estructura de pisos de pagoda japonesa (low poly)
         const numPisos = 3; // Número de pisos de la pagoda
         const baseSize = 3.5; // Tamaño de la base del techo
@@ -291,6 +338,8 @@ class Tower {
         lantern.position.y = 1.5;
         
         this.decorations.push(lantern);
+        
+        console.log('Decoraciones japonesas de respaldo creadas para la torre', this.id);
     }
     
     /**
@@ -642,43 +691,36 @@ class Tower {
      * @param {string} newTheme - Nuevo tema
      */
     changeTheme(newTheme) {
-        // Limpiar decoraciones actuales
-        this.decorations.forEach(decoration => {
-            if (decoration.parent) {
-                decoration.parent.remove(decoration);
-            }
-        });
+        console.log(`Torre ${this.id}: Cambiando tema de '${this.theme}' a '${newTheme}'`);
+        
+        // Guardar las referencias a los objetos actuales
+        const oldMesh = this.mesh;
+        const oldBase = this.baseMesh;
+        const oldDecorations = [...this.decorations];
+        
+        // Limpiar decoraciones actuales del array (para no duplicarlas)
         this.decorations = [];
         
         // Actualizar tema
         this.theme = newTheme;
         
         // Crear nuevos objetos con el nuevo tema
-        const oldMesh = this.mesh;
-        const oldBase = this.baseMesh;
-        
         this.baseMesh = this.createBaseMesh();
         this.mesh = this.createMesh();
+        
+        // Crear nuevas decoraciones según el tema
         this.createDecorations();
         
-        // Reemplazar objetos antiguos (esto debe ser manejado por Game.js)
-        if (oldMesh.parent) {
-            oldMesh.parent.add(this.mesh);
-            oldMesh.parent.remove(oldMesh);
-        }
+        console.log(`Torre ${this.id}: Tema cambiado. ${this.decorations.length} nuevas decoraciones creadas.`);
         
-        if (oldBase.parent) {
-            oldBase.parent.add(this.baseMesh);
-            oldBase.parent.remove(oldBase);
-        }
-        
-        // Añadir decoraciones a la escena (esto debe ser manejado por Game.js)
+        // Devolver los cambios para que Game.js pueda actualizar la escena
         return {
             newTowerMesh: this.mesh,
             newBaseMesh: this.baseMesh,
             decorations: this.decorations,
             oldTowerMesh: oldMesh,
-            oldBaseMesh: oldBase
+            oldBaseMesh: oldBase,
+            oldDecorations: oldDecorations
         };
     }
 } 
