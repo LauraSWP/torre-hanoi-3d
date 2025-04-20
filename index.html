@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Torre de Hanoi - 3D</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="game-ui">
+            <div id="game-info">
+                <div id="moves-counter">Movimientos: <span>0</span></div>
+                <div id="timer">Tiempo: <span>00:00</span></div>
+                <div id="best-score">Mejor: <span>--</span></div>
+            </div>
+            <div id="game-controls">
+                <button id="reset-btn">Reiniciar</button>
+                <select id="difficulty-select">
+                    <option value="3">Fácil (3 discos)</option>
+                    <option value="4" selected>Normal (4 discos)</option>
+                    <option value="5">Difícil (5 discos)</option>
+                    <option value="6">Experto (6 discos)</option>
+                    <option value="7">Maestro (7 discos)</option>
+                </select>
+                <select id="game-mode-select">
+                    <option value="normal" selected>Modo Normal</option>
+                    <option value="contrarreloj">Contrarreloj</option>
+                    <option value="desafio">Desafío</option>
+                    <option value="puzzle">Puzzle</option>
+                </select>
+                <button id="solution-btn">Solución</button>
+                <button id="theme-btn">Temas</button>
+            </div>
+            <div id="game-status"></div>
+        </div>
+        <div id="game-canvas-container"></div>
+        
+        <!-- Instrucciones -->
+        <div id="instructions-overlay" class="hidden">
+            <div id="instructions-modal">
+                <h2>Instrucciones</h2>
+                <p>El objetivo del juego es mover todos los discos de la torre 1 a la torre 3, siguiendo estas reglas:</p>
+                <ul>
+                    <li>Solo puedes mover un disco a la vez.</li>
+                    <li>Nunca puedes colocar un disco más grande sobre uno más pequeño.</li>
+                    <li>Solo puedes mover el disco que está en la parte superior de cada torre.</li>
+                </ul>
+                <h3>Controles</h3>
+                <p>Haz clic en un disco para seleccionarlo y luego haz clic en la torre donde deseas colocarlo.</p>
+                <p>También puedes arrastrar y soltar los discos entre las torres.</p>
+                <p>Utiliza el botón "Reiniciar" para comenzar un nuevo juego.</p>
+                <p>Utiliza el botón "Solución" para mostrar paso a paso cómo resolver el puzzle.</p>
+                <h3>Personalización</h3>
+                <p>Utiliza el botón "Temas" para cambiar la apariencia de las torres y discos.</p>
+                <button id="close-instructions">Cerrar</button>
+            </div>
+        </div>
+        
+        <div id="theme-overlay" class="hidden">
+            <div id="theme-modal">
+                <h2>Personalización</h2>
+                
+                <div class="theme-section">
+                    <h3>Estilo de Torres</h3>
+                    <div class="theme-options tower-themes">
+                        <div class="theme-option selected" data-theme="default">Clásico</div>
+                        <div class="theme-option" data-theme="japanese">Japonés</div>
+                        <div class="theme-option" data-theme="futuristic">Futurista</div>
+                        <div class="theme-option" data-theme="ancient">Antiguo</div>
+                        <div class="theme-option" data-theme="crystal">Cristal</div>
+                    </div>
+                </div>
+                
+                <div class="theme-section">
+                    <h3>Estilo de Discos</h3>
+                    <div class="theme-options disk-themes">
+                        <div class="theme-option selected" data-theme="default">Clásico</div>
+                        <div class="theme-option" data-theme="metallic">Metálico</div>
+                        <div class="theme-option" data-theme="candy">Caramelo</div>
+                        <div class="theme-option" data-theme="neon">Neón</div>
+                        <div class="theme-option" data-theme="gem">Gema</div>
+                    </div>
+                </div>
+                
+                <div id="theme-buttons">
+                    <button id="cancel-theme">Cancelar</button>
+                    <button id="save-theme">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="lib/three.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/Disk.js"></script>
+    <script src="js/Tower.js"></script>
+    <script src="js/Game.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html> 

@@ -1,0 +1,76 @@
+# Estructura del Proyecto - Torre de Hanoi
+
+## Descripción
+La Torre de Hanoi es un juego de puzzle clásico que consiste en mover una pila de discos desde una columna inicial a otra columna final, usando una columna intermedia como ayuda, siguiendo ciertas reglas:
+1. Solo se puede mover un disco a la vez
+2. Un disco solo puede colocarse sobre otro disco más grande o en una columna vacía
+
+## Tecnologías
+- HTML5
+- CSS3
+- JavaScript
+- Three.js (para gráficos 3D)
+
+## Estructura de Archivos
+```
+torre-hanoi/
+├── index.html             # Archivo principal HTML
+├── css/
+│   └── style.css          # Estilos CSS
+├── js/
+│   ├── main.js            # Archivo principal JavaScript
+│   ├── Game.js            # Clase principal del juego
+│   ├── Disk.js            # Clase para los discos
+│   ├── Tower.js           # Clase para las torres
+│   └── utils.js           # Funciones auxiliares
+├── lib/
+│   └── three.min.js       # Biblioteca Three.js
+└── assets/
+    ├── textures/          # Texturas para los elementos 3D
+    ├── models/            # Modelos 3D si es necesario
+    └── sounds/            # Efectos de sonido
+```
+
+## Características Básicas
+1. **Configuración inicial**:
+   - Crear escena 3D con Three.js
+   - Configurar cámara y luces
+   - Crear las tres columnas/torres
+   - Crear discos de diferentes tamaños
+   
+2. **Mecánica de juego básica**:
+   - Selección de disco (clic o toque)
+   - Movimiento válido según las reglas
+   - Detectar victoria cuando todos los discos estén en la torre final
+
+## Características Avanzadas
+1. **Interfaz de usuario**:
+   - Contador de movimientos
+   - Temporizador
+   - Botón de reinicio
+   - Selector de dificultad (número de discos)
+   
+2. **Efectos visuales**:
+   - Animaciones de movimiento suaves
+   - Efectos de iluminación
+   - Resaltado de selección y movimientos válidos
+   
+3. **Sonido**:
+   - Efectos de sonido para movimientos
+   - Música de fondo
+   - Sonido de victoria
+
+4. **Características adicionales**:
+   - Guardado de mejor puntuación
+   - Tutorial/instrucciones
+   - Modos de juego alternativos
+   - Personalización de apariencia
+
+## Plan de Implementación
+1. Crear la estructura básica de archivos
+2. Implementar la escena 3D básica con torres
+3. Añadir la lógica de juego básica
+4. Implementar la detección de movimientos válidos y victoria
+5. Añadir la interfaz de usuario
+6. Implementar características avanzadas
+7. Optimizar y depurar 
