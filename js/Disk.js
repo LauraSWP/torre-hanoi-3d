@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { DISK_COLORS } from './utils.js';
 
 /**
  * Clase que representa un disco en el juego Torre de Hanoi
@@ -207,11 +208,6 @@ export class Disk {
             gem: [0xFF0088, 0x00FFBB, 0xCCFF00, 0x00BBFF, 0xEE2200, 0x3300FF, 0xFF8800, 0xBB00FF]
         };
         
-        // Definir DISK_COLORS si no está globalmente disponible
-        const DISK_COLORS = colors.default || [
-            0xff0000, 0x00ff00, 0x0000ff, 0xffff00, 0xff00ff, 0x00ffff, 0xffffff, 0x808080
-        ];
-
         // Usar colores del tema o los predeterminados
         const themeColors = colors[this.theme] || DISK_COLORS;
         return themeColors[this.index % themeColors.length];

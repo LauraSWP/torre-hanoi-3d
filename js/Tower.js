@@ -1,5 +1,7 @@
 import * as THREE from 'three';
 import { Disk } from './Disk.js'; // Asegúrate de que Disk.js también exporte la clase Disk
+import { jtowermodel } from './models.js'; // Importar jtowermodel
+import { calculateDiskY } from './utils.js'; // Importar la función necesaria
 
 /**
  * Clase que representa una torre en el juego Torre de Hanoi
@@ -213,7 +215,7 @@ export class Tower {
      */
     createJapaneseDecorations() {
         // Cargar el modelo japonés predefinido
-        if (typeof jtowermodel !== 'undefined' && jtowermodel !== null) {
+        if (jtowermodel !== null) {
             console.log('Usando modelo japonés predefinido para la torre', this.id);
             
             try {
@@ -246,7 +248,7 @@ export class Tower {
                 this.createFallbackJapaneseDecorations();
             }
         } else {
-            console.warn(`El modelo jtowermodel no está disponible para la torre ${this.id}. Estado: ${jtowermodel === null ? 'null' : 'undefined'}`);
+            console.warn(`El modelo jtowermodel no está disponible para la torre ${this.id}. Estado: null`);
             this.createFallbackJapaneseDecorations();
         }
     }
@@ -524,7 +526,7 @@ export class Tower {
      * @param {Disk} disk - Disco a añadir
      */
     addDisk(disk) {
-        // Calcular la posición Y del disco
+        // Calcular la posición Y del disco usando la función importada
         const diskHeight = 0.8;
         const y = calculateDiskY(this.disks.length, diskHeight, this.baseMesh.geometry.parameters.height);
         
