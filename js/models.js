@@ -30,7 +30,7 @@ export function loadJapaneseTowerModel() {
                 
                 // Ajustar posición, escala o rotación si es necesario
                 // Estos valores tendrán que ajustarse según las características del modelo
-                jtowermodel.scale.set(2, 2, 2);
+                jtowermodel.scale.set(4, 4, 4);
                 jtowermodel.position.set(0, 0, 0);
                 
                 // Configurar materiales y sombras
@@ -102,7 +102,7 @@ function tryAlternativePath(loader, resolve, reject) {
             (gltf) => {
                 console.log(`Modelo cargado exitosamente desde ruta alternativa: ${path}`);
                 jtowermodel = gltf.scene;
-                jtowermodel.scale.set(2, 2, 2);
+                jtowermodel.scale.set(4, 4, 4);
                 resolve(jtowermodel);
             },
             (xhr) => {
