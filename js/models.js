@@ -30,7 +30,7 @@ export function loadJapaneseTowerModel() {
                 
                 // Ajustar posición, escala o rotación si es necesario
                 // Estos valores tendrán que ajustarse según las características del modelo
-                jtowermodel.scale.set(4, 4, 4);
+                jtowermodel.scale.set(14, 14, 14);
                 jtowermodel.position.set(0, 0, 0);
                 
                 // Configurar materiales y sombras
